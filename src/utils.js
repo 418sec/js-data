@@ -56,6 +56,10 @@ const isPlainObject = function (value) {
   return !!value && typeof value === 'object' && value.constructor === Object
 }
 
+const isPrototypePolluted = function (key) {
+  return ['__proto__', 'constructor', 'prototype'].includes(key)
+}
+
 const mkdirP = function (object, path) {
   if (!path) {
     return object
@@ -446,6 +450,7 @@ const utils = {
   deepMixIn (dest, source) {
     if (source) {
       for (var key in source) {
+        if (isPrototypePolluted(key)) continue
         const value = source[key]
         const existing = dest[key]
         if (isPlainObject(value) && isPlainObject(existing)) {
