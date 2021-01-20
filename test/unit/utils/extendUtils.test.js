@@ -54,6 +54,14 @@ describe('utils.deepMixIn', function () {
     assert.deepEqual(expected, actual, 'sorce own properties recursivly copied and overriden into dest')
     assert.equal(dest, utils.deepMixIn(dest), 'empty source argument returns dest')
   })
+  
+  it('should not pollute prototype', function () {
+    const dest = {}
+    const src = JSON.parse('{"__proto__": {"polluted": true}}')
+    utils.deepMixIn(dest, src)
+
+    assert.equal({}.polluted, undefined, 'object prototype is polluted')
+  })
 })
 
 describe('utils.extend', function () {
